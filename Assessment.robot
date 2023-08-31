@@ -14,9 +14,13 @@ ${txt_last_name}  //*[contains(@class,'form-control') and contains(@placeholder,
 ${txt_post_code}  //*[contains(@class,'form-control') and contains(@placeholder,'Post Code')]
 ${btn_add_customer}  //*[@type="submit" and contains(text(),'Add Customer')]
 ${btn_customers}  //*[@ng-class="btnClass3" and contains(text(),'Customers')]
-
-
-
+${btn_deposit}  //button[contains(@ng-class,'btnClass') and contains(text(),'Deposit')]
+${btn_submit_deposit}  //button[@type='submit' and contains(text(),'Deposit')]
+${btn_submit_withdrawal}  //button[@type='submit' and contains(text(),'Withdraw')]
+${btn_login}  //button[contains(text(),'Login')]
+${btn_withdrawl}   //button[contains(text(),'Withdrawl')]
+${txt_amount}  //input[@type="number" and contains(@placeholder,'amount')]
+${lbl_customer_bal}  //div[@ng-hide='noAccount' and contains(string(),'Balance')]/strong[2]
 
 *** Keywords ***
 Open Home Page
@@ -45,9 +49,7 @@ Enter Customer Details
     Input Text    ${txt_post_code}    ${post_code}  
     Click Element  ${btn_add_customer}
     Handle Alert  action=ACCEPT
-    # Set Focus To Element  ${btn_customers}
-    # Click Element  ${btn_customers}
-    sleep  2s
+    #sleep  2s
 
 Click on Customers Button
     Set Focus To Element  ${btn_customers}
@@ -76,74 +78,51 @@ Select Account Number From Drop-down List
     Select From List By Label  id:accountSelect  ${account}
 
 Click Login
-    ${btn_login}  Set Variable  //button[contains(text(),'Login')]
+	[Documentation]  Click login button upon selecting customer from drop-down list
     Wait Until Element Is Visible    ${btn_login} 
     Click Element  ${btn_login} 
 
 Click Deposit
-    ${btn}  Set Variable  //button[contains(@ng-class,'btnClass') and contains(text(),'Deposit')]
-    Wait Until Element Is Visible    ${btn}   5s
-    Click Element  ${btn} 
-    Wait Until Element Is Visible  //button[@type='submit' and contains(text(),'Deposit')]
-
+    Wait Until Element Is Visible    ${btn_deposit}   5s
+    Click Element  ${btn_deposit} 
+    Wait Until Element Is Visible  ${btn_submit_deposit}
+	
 Click Submit Deposit
-    ${btn}  Set Variable  //button[@type='submit' and contains(text(),'Deposit')]
-    Wait Until Element Is Visible    ${btn} 
-    Click Element  ${btn}
+    Wait Until Element Is Visible    ${btn_submit_deposit} 
+    Click Element  ${btn_submit_deposit}
 
 Click Withdrawl
-    ${btn}  Set Variable  //button[contains(text(),'Withdrawl')]
-    Wait Until Element Is Visible    ${btn} 
-    Click Element  ${btn} 
-    Wait Until Element Is Visible  //button[@type='submit' and contains(text(),'Withdraw')]
+    Wait Until Element Is Visible    ${btn_withdrawl} 
+    Click Element  ${btn_withdrawl} 
+    Wait Until Element Is Visible  ${btn_submit_withdrawal}
 
 Click Submit Withdraw
-    [Documentation]  
-    ${btn}  Set Variable  //button[@type='submit' and contains(text(),'Withdraw')]
-    Wait Until Element Is Visible    ${btn} 
-    Click Element  ${btn}
+    [Documentation]  To click submit withdraw button
+    Wait Until Element Is Visible    ${btn_submit_withdrawal} 
+    Click Element  ${btn_submit_withdrawal}
 
 Input Amount
     [Documentation]  To input transaction amount into textbox
     [Arguments]  ${amount}
-    ${txt}  Set Variable  //input[@type="number" and contains(@placeholder,'amount')]
-    Wait Until Element Is Visible    ${txt}     
-    Input Text  ${txt}  ${amount}
+    Wait Until Element Is Visible    ${txt_amount}     
+    Input Text  ${txt_amount}   ${amount}
 
 Get Customer Balance
     [Documentation]  To get customer balance appearing on UI
-    ${bal}  Get Text   //div[@ng-hide='noAccount' and contains(string(),'Balance')]/strong[2]
+    ${bal}  Get Text   ${lbl_customer_bal}
     [Return]  ${bal}
+ 
  
 *** Test Cases ***
 
-Test Q1_draft
-    Open Browser  https://www.globalsqa.com/angularJs-protractor/BankingProject/#/login  chrome
-    #sleep  10s
-    Wait Until Element Is Visible   ${btn_bank_mgr_login}   20s
-    Click Element   ${btn_bank_mgr_login}
-    #sleep  10s
-    Wait Until Element Is Visible   ${btn_add_customer_main}   10s
-    Click Element    ${btn_add_customer_main}
-    Wait Until Element Is Visible   ${txt_first_name}   10s
-    Input Text    ${txt_first_name}    James
-    Input Text    ${txt_last_name}    Connely
-    Input Text    ${txt_post_code}    L789C349
-    
-    Click Element  ${btn_add_customer}
-    Handle Alert  action=ACCEPT
-    Set Focus To Element  ${btn_customers}
-    Click Element  ${btn_customers}
-    sleep  2s
-
 Test Q1
+	[Documentation]  Login as bank manager, add customers and validate all added customers appearing on table. Delete 2 customers from the table
     Open Home Page
     Login As Bank Manager
     Click Add Customer In Bank Manager
     FOR  ${each_customer}  IN  @{CUSTOMERS}
         Log   ${each_customer['firstname']}
         Enter Customer Details  ${each_customer['firstname']}   ${each_customer['lastname']}  ${each_customer['postcode']}
-
     END
     
     Click on Customers Button
@@ -158,10 +137,10 @@ Test Q1
     Run Keyword And Expect Error  *  Verify Customer Exists In Grid Table   Jackson  Frank  L789C349
     Run Keyword And Expect Error  *  Verify Customer Exists In Grid Table   Christopher  Connely  L789C349
 
-    # Enter Customer Details  ${each_customer['firstname']}   ${each_customer['firstname']}  ${each_customer['firstname']}
 
     
 Test Q2
+	[Documentation]
     @{transactions}  Create List  50000  -3000  -2000  5000  -10000  -15000  1500  -6000
     ${bal}  Set Variable  0
     Open Home Page   
