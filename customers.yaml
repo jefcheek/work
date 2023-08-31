@@ -1,0 +1,23 @@
+Customers:
+  - firstname: Christopher
+    lastname: Connely
+    postcode: L789C349
+  - firstname: Frank
+    lastname: Christopher
+    postcode: M098Q585
+  - firstname: Christopher
+    lastname: Minka
+    postcode: L789C349
+  - firstname: Connely
+    lastname: Jackson
+    postcode: L789C349
+  - firstname: Jackson
+    lastname: Frank
+    postcode: L789C349
+  - firstname: Minka
+    lastname: Jackson
+    postcode: A897N450
+  - firstname: Jackson
+    lastname: Connely
+    postcode: L789C349
+
