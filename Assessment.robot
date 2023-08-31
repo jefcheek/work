@@ -24,24 +24,28 @@ ${lbl_customer_bal}  //div[@ng-hide='noAccount' and contains(string(),'Balance')
 
 *** Keywords ***
 Open Home Page
+    [Documentation]  To open specified url page
     [Arguments]  ${url}=${page_url}  ${browser}=chrome
     Open Browser  ${url}  ${browser}
 
-
 Login As Bank Manager
+    [Documentation]  To login as bank manager
     Wait Until Element Is Visible   ${btn_bank_mgr_login}   30s
     Click Element   ${btn_bank_mgr_login}    
 
 Login As Customer
+    [Documentation]  To login as customer
     Wait Until Element Is Visible   ${btn_customer_login}   20s
     Click Element   ${btn_customer_login}  
 
 
 Click Add Customer In Bank Manager
+    [Documentation]  To click Add Customer in Bank Manager page
     Wait Until Element Is Visible   ${btn_add_customer_main}   10s
     Click Element    ${btn_add_customer_main}
 
 Enter Customer Details
+    [Documentation]  To enter customer details
     [Arguments]  ${first_name}  ${last_name}  ${post_code}
     Wait Until Element Is Visible   ${txt_first_name}   10s
     Input Text    ${txt_first_name}    ${first_name}
@@ -52,6 +56,7 @@ Enter Customer Details
     #sleep  2s
 
 Click on Customers Button
+    [Documentation]  To click Customers button
     Set Focus To Element  ${btn_customers}
     Click Element  ${btn_customers}
 
@@ -63,16 +68,19 @@ Verify Customer Exists In Grid Table
     Page Should Contain Element  ${tbl_data}
 
 Delete Customer
+    [Documentation]  To delete customer in the grid table
     [Arguments]  ${first_name}  ${last_name}  ${post_code}
     Set Focus To Element  //td[@class="ng-binding" and contains(text(),'${first_name}')]/following-sibling::*[1][contains(text(),'${last_name}')]/following-sibling::*[1][contains(text(),'${postcode}')]/following-sibling::*[2]/button
     Click Element  //td[@class="ng-binding" and contains(text(),'${first_name}')]/following-sibling::*[1][contains(text(),'${last_name}')]/following-sibling::*[1][contains(text(),'${postcode}')]/following-sibling::*[2]/button
 
 Select Customer From Drop-down List
+    [Documentation]  To select customer from drop-down list
     [Arguments]  ${customer}
     Wait Until Element Is Visible  id:userSelect
     Select From List By Label  id:userSelect  ${customer}
 
 Select Account Number From Drop-down List
+    [Documentation]  To select account number at customer page
     [Arguments]  ${account}
     Wait Until Element Is Visible  id:accountSelect  10s
     Select From List By Label  id:accountSelect  ${account}
@@ -83,15 +91,18 @@ Click Login
     Click Element  ${btn_login} 
 
 Click Deposit
+    [Documentation]  To click Deposit button
     Wait Until Element Is Visible    ${btn_deposit}   5s
     Click Element  ${btn_deposit} 
     Wait Until Element Is Visible  ${btn_submit_deposit}
 	
 Click Submit Deposit
+    [Documentation]  To click submit deposit button
     Wait Until Element Is Visible    ${btn_submit_deposit} 
     Click Element  ${btn_submit_deposit}
 
 Click Withdrawl
+    [Documentation]  To click Withdrawl button
     Wait Until Element Is Visible    ${btn_withdrawl} 
     Click Element  ${btn_withdrawl} 
     Wait Until Element Is Visible  ${btn_submit_withdrawal}
@@ -140,7 +151,7 @@ Test Q1
 
     
 Test Q2
-	[Documentation]
+	[Documentation]  Login as customer; perform credit & debit transaction; verify balance
     @{transactions}  Create List  50000  -3000  -2000  5000  -10000  -15000  1500  -6000
     ${bal}  Set Variable  0
     Open Home Page   
